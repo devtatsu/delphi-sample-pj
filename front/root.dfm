@@ -12,21 +12,31 @@ object Form1: TForm1
   Font.Style = []
   TextHeight = 15
   object Button1: TButton
-    Left = 280
-    Top = 232
+    Left = 264
+    Top = 336
     Width = 75
     Height = 25
     Caption = #23455#34892
     TabOrder = 0
     OnClick = Button1Click
   end
-  object FDConnection1: TFDConnection
-    Left = 8
-    Top = 24
-  end
-  object FDQuery1: TFDQuery
-    Connection = FDConnection1
-    Left = 88
-    Top = 24
+  object StringGrid1: TStringGrid
+    Left = 48
+    Top = 104
+    Width = 544
+    Height = 177
+    TabOrder = 1
+    ColWidths = (
+      64
+      64
+      64
+      64
+      64)
+    RowHeights = (
+      24
+      24
+      24
+      24
+      24)
   end
 end
