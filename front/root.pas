@@ -34,10 +34,22 @@ implementation
 procedure TForm1.Button1Click(Sender: TObject);
 var
   cnt: Integer;
+  AppPath, ParentPath: string;
 begin
+
+  // 実行ファイルのパスを取得
+  AppPath := ExtractFilePath(ParamStr(0));
+
+  // 2階層上のパスを取得
+  ParentPath := ExtractFileDir(ExtractFileDir(ExtractFileDir(ExtractFileDir(AppPath))));
+
+  // パスを表示
+  ShowMessage('アプリケーションのパス: ' + ParentPath);
+
   // データベース接続の設定
   FDConnection1.DriverName := 'SQLite';
-  FDConnection1.Params.Database := 'C:\workspace\delphi-sample-pj\sample_db.db';  // データベースファイルのパス
+  // FDConnection1.Params.Database := 'C:\workspace\delphi-sample-pj\sample_db.db';  // データベースファイルのパス
+  FDConnection1.Params.Database := ParentPath + '\sample_db.db';  // データベースファイルのパス
   FDConnection1.LoginPrompt := False;
   FDConnection1.Connected := True;
 
