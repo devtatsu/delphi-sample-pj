@@ -4,19 +4,14 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FireDAC.Stan.Intf, FireDAC.Stan.Option,
-  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
-  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
-  Data.DB, FireDAC.Comp.Client, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
-  FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.Stan.Param,
-  FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet,
-  Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
+  Data.DB, FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.Stan.Param,
+  Vcl.StdCtrls, ConnectOpeUtil, Vcl.Grids;
 
 type
   TForm1 = class(TForm)
     Button1: TButton;
-    FDConnection1: TFDConnection;
-    FDQuery1: TFDQuery;
+    StringGrid1: TStringGrid;
     procedure Button1Click(Sender: TObject);
   private
     { Private 宣言 }
@@ -35,6 +30,9 @@ procedure TForm1.Button1Click(Sender: TObject);
 var
   cnt: Integer;
   AppPath, ParentPath: string;
+  SQLiteDB: TSQLiteDatabase;
+  DataSet: TDataSet;
+
 begin
 
   // 実行ファイルのパスを取得
@@ -44,23 +42,38 @@ begin
   ParentPath := ExtractFileDir(ExtractFileDir(ExtractFileDir(ExtractFileDir(AppPath))));
 
   // パスを表示
-  ShowMessage('アプリケーションのパス: ' + ParentPath);
+  ShowMessage('app root path: ' + ParentPath);
 
-  // データベース接続の設定
-  FDConnection1.DriverName := 'SQLite';
-  // FDConnection1.Params.Database := 'C:\workspace\delphi-sample-pj\sample_db.db';  // データベースファイルのパス
-  FDConnection1.Params.Database := ParentPath + '\sample_db.db';  // データベースファイルのパス
-  FDConnection1.LoginPrompt := False;
-  FDConnection1.Connected := True;
+  SQLiteDB := TSQLiteDatabase.Create(ParentPath + '\sample_db.db');
 
-  // クエリの設定
-  FDQuery1.Connection := FDConnection1;
-  FDQuery1.SQL.Text := 'SELECT count(*) as aa FROM users';  // データを取得するクエリ
-  FDQuery1.Open;  // クエリを実行してデータを取得
+  try
+    if SQLiteDB.Connect then
+    begin
 
-  cnt := FDQuery1.FieldByName('aa').AsInteger;
+      // データの取得
+      DataSet := SQLiteDB.QuerySQL('SELECT * FROM users;');
+      try
+        if Assigned(DataSet) then
+        begin
+          // データセットを処理する（例: Gridに表示するなど）
+          ShowMessage('Records: ' + IntToStr(DataSet.RecordCount));
+        end
+        else
+        begin
+          ShowMessage('Query returned no data.');
+        end;
+      finally
+        DataSet.Free; // データセットの解放
+      end;
 
-  ShowMessage(Format('Count: %d', [cnt]));
+      // 切断
+      SQLiteDB.Disconnect;
+    end
+    else
+      ShowMessage('Failed to connect to the database.');
+  finally
+    SQLiteDB.Free; // SQLiteDBインスタンスの解放
+  end;
 
 end;
 
