@@ -1,0 +1,69 @@
+# Delphiのコンパイル出力
+*.dcu
+*.dcp
+*.dsk
+*.bdsproj
+*.bdsproj.user
+*.local
+*.dproj
+*.dproj.local
+*.bpl
+*.bpr
+*.dcu
+*.exe
+*.map
+*.pdb
+*.res
+*.o
+
+# IDEの一時ファイル
+*.~*
+*.ncb
+*.idb
+*.opendb
+*.dsk
+*.suo
+*.user
+
+# ライブラリ
+lib/
+packages/
+*.lib
+
+# ビルド出力ディレクトリ
+bin/
+BIN/
+output/
+Debug/
+Release/
+Win32/
+Win64/
+*.\*
+
+# バージョン管理しないユーザー固有の設定ファイル
+*.local
+*.user
+
+# バックアップファイル
+*~ 
+*.bak
+*.orig
+
+# 設定ファイル
+*.config
+
+# キャッシュファイル
+*.cache
+
+# その他の不要なファイル
+Thumbs.db
+ehthumbs.db
+
+# Delphiの__historyフォルダを無視
+__history/
+
+# Delphiの__recoveryフォルダを無視
+__recovery/
+
+# DB
+*.db
