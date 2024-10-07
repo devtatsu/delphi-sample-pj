@@ -2,7 +2,7 @@ program delphi_sample;
 
 uses
   Vcl.Forms,
-  root in 'root.pas' {Form1};
+  Root in 'Root.pas' {Form1};
 
 {$R *.res}
 
